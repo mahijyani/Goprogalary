@@ -21,13 +21,13 @@ jobs:
         java-version: '17'
 
     - name: Make gradlew executable
-      run: chmod +x GoProGalary/gradlew
+      run: chmod +x ./gradlew
 
     - name: Build APK
-      run: cd GoProGalary && ./gradlew assembleDebug
+      run: ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: GoProGalary-APK
-        path: GoProGalary/app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
