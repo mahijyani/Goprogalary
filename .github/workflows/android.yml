@@ -35,7 +35,7 @@ jobs:
       
     - name: Build Android APK
       run: cordova build android --release
-      working-directory: mjmarkgen-app
+      working-directory: Goprogalary
       
     - name: Sign APK (Debug)
       run: cordova build android --debug
