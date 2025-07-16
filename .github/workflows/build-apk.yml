@@ -14,7 +14,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+    - name: Debug Folder Structure
+      run: ls -R
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
