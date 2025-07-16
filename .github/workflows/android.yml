@@ -1,33 +1,85 @@
-name: Android CI/CD Pipeline
+name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Set up JDK
-      uses: actions/setup-java@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
-
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Build APK
-      run: ./gradlew assembleDebug
-
-    - name: Upload APK
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    - name: Accept Android SDK Licenses
+      run: yes | sdkmanager --licenses
+    - name: Install Android Build Tools 33.0.2  # ✅ Fix for build tools not found error
+      run: sdkmanager "build-tools;33.0.2"
+      
+    - name: Install Cordova CLI
+      run: |
+        npm install -g cordova@latest
+        cordova telemetry off
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Build Android APK
+      run: cordova build android --release
+      working-directory: mjmarkgen-app
+      
+    - name: Sign APK (Debug)
+      run: cordova build android --debug
+      
+    - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: GoProGalary-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: android-apk
+        path: |
+          platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        retention-days: 30
+        
+    - name: Create Release
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        body: |
+          Automated release of MJ MarkGen Android APK
+          
+          ## Download
+          - **app-debug.apk**: Debug version for testing
+          - **app-release-unsigned.apk**: Release version (unsigned)
+          
+          ## Installation
+          1. Enable "Unknown Sources" in Android Settings
+          2. Download and install the APK file
+          3. Launch the MJ MarkGen app
+          
+          Built from commit: ${{ github.sha }}
+        files: |
+          mjmarkgen-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          mjmarkgen-app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
