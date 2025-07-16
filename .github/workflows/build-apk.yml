@@ -14,36 +14,34 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-        
+
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
-        
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-    - name: Accept Android SDK Licenses
-      run: yes | sdkmanager --licenses
-    - name: Install Android Build Tools 33.0.2  # ✅ Fix for build tools not found error
-      run: sdkmanager "build-tools;33.0.2"
-      
-    - name: Build Android APK
-      run: build android --release
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
       working-directory: Goprogalary
-      
-    - name: Sign APK (Debug)
-      run: build android --debug
-      
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+      working-directory: Goprogalary
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+      working-directory: Goprogalary
+
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: android-apk
         path: |
-          platforms/android/app/build/outputs/apk/debug/app-debug.apk
-          platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          Goprogalary/app/build/outputs/apk/debug/app-debug.apk
+          Goprogalary/app/build/outputs/apk/release/app-release.apk
         retention-days: 30
-        
+
     - name: Create Release
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
@@ -51,21 +49,10 @@ jobs:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
         body: |
-          Automated release of Goprogalary Android APK
-          
-          ## Download
-          - **app-debug.apk**: Debug version for testing
-          - **app-release-unsigned.apk**: Release version (unsigned)
-          
-          ## Installation
-          1. Enable "Unknown Sources" in Android Settings
-          2. Download and install the APK file
-          3. Launch the Goprogalary app
-          
-          Built from commit: ${{ github.sha }}
+          ✅ GoProGalary Android APK Build
+          🔹 Debug + Release APKs included
         files: |
-          goprogalary/platforms/android/app/build/outputs/apk/debug/app-debug.apk
-          goprogalary/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          Goprogalary/app/build/outputs/apk/debug/app-debug.apk
+          Goprogalary/app/build/outputs/apk/release/app-release.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
