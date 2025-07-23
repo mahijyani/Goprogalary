@@ -24,7 +24,6 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-      working-directory: Goprogalary
 
     - name: Build Debug APK
       run: ./gradlew assembleDebug
