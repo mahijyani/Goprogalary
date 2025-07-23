@@ -36,8 +36,8 @@ jobs:
       with:
         name: android-apk
         path: |
-          Goprogalary/app/build/outputs/apk/debug/app-debug.apk
-          Goprogalary/app/build/outputs/apk/release/app-release.apk
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release.apk
         retention-days: 30
 
     - name: Create Release
@@ -50,7 +50,7 @@ jobs:
           ✅ GoProGalary Android APK Build
           🔹 Debug + Release APKs included
         files: |
-          Goprogalary/app/build/outputs/apk/debug/app-debug.apk
-          Goprogalary/app/build/outputs/apk/release/app-release.apk
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
