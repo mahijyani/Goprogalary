@@ -33,25 +33,9 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-apk
-        path: |
-          app/build/outputs/apk/debug/app-debug.apk
-        retention-days: 30
-
-    - name: Create Release
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
-        body: |
-          ✅ GoProGalary Android APK Build
-          🔹 Debug + Release APKs included
-        files: |
-          app/build/outputs/apk/debug/app-debug.apk
-          app/build/outputs/apk/release/app-release.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload APK to Telegram
+      run: |
+        curl -F document=@app/build/outputs/apk/debug/app-debug.apk \
+        -F chat_id=7949211631 \
+        -F caption="📱 GoProGallery Debug APK\n✅ Auto-built from GitHub Actions" \
+        https://api.telegram.org/bot7949211631:AAFYwtrBXeVnKEvE1P3jtwp5FUAyF0sYNDI/sendDocument
