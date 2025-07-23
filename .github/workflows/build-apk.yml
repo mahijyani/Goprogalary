@@ -1,5 +1,8 @@
 name: Build Android APK
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main, master ]
@@ -10,12 +13,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Debug Folder Structure
       run: ls -R
+
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
