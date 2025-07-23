@@ -27,11 +27,9 @@ jobs:
 
     - name: Build Debug APK
       run: ./gradlew assembleDebug
-      working-directory: Goprogalary
 
     - name: Build Release APK
       run: ./gradlew assembleRelease
-      working-directory: Goprogalary
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
