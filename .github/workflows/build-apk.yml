@@ -36,6 +36,6 @@ jobs:
     - name: Upload APK to Telegram
       run: |
         curl -F document=@app/build/outputs/apk/debug/app-debug.apk \
-        -F chat_id=7949211631 \
+        -F chat_id=8151431539 \
         -F caption="📱 GoProGallery Debug APK\n✅ Auto-built from GitHub Actions" \
-        https://api.telegram.org/bot7949211631:AAFYwtrBXeVnKEvE1P3jtwp5FUAyF0sYNDI/sendDocument
+        https://api.telegram.org/bot8151431539:AAFODvsbw-WiWIO_Iv5OG3YsGwH-EF6qYUo/sendDocument
