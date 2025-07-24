@@ -33,9 +33,9 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-      - name: Upload Debug APK to GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
+    - name: Upload Debug APK to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
           files: app/build/outputs/apk/debug/app-debug.apk
-        env:
+      env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
