@@ -1,12 +1,13 @@
-name: Build Android APK
+name: Build Android APK and Upload as Artifact
 
 permissions:
   contents: write
 
 on:
   push:
-    tags:
-      - 'v1.0'       
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -14,27 +15,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Debug Folder Structure
         run: ls -R
 
-      - name: Setup Java JDK
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
 
-      - name: Make gradlew executable
+      - name: Make Gradle executable
         run: chmod +x ./gradlew
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload Debug APK to GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4
         with:
-          files: app/build/outputs/apk/debug/app-debug.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
