@@ -33,9 +33,9 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-    - name: Upload APK to Telegram
-      run: |
-        curl -F document=@app/build/outputs/apk/debug/app-debug.apk \
-        -F chat_id=8151431539 \
-        -F caption="📱 GoProGallery Debug APK\n✅ Auto-built from GitHub Actions" \
-        https://api.telegram.org/bot8151431539:AAFODvsbw-WiWIO_Iv5OG3YsGwH-EF6qYUo/sendDocument
+      - name: Upload Debug APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
