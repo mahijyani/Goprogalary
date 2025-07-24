@@ -1,24 +1,30 @@
-on:
-  push:
-    tags:
-      - 'v1.0'
-  workflow_dispatch:
+name: Build Android APK
 
 permissions:
   contents: write
 
+on:
+  push:
+    tags:
+      - 'v1.0'       
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup JDK
+      - name: Debug Folder Structure
+        run: ls -R
+
+      - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -26,7 +32,7 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK to GitHub Release
+      - name: Upload Debug APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: app/build/outputs/apk/debug/app-debug.apk
