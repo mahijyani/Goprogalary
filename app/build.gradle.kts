@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.demo"
+    namespace = "com.gopro.galary"
     compileSdk = 36
 
     defaultConfig {
