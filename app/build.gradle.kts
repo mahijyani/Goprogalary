@@ -9,7 +9,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.demo"
+        applicationId = "com.gopro.galary"
         minSdk = 22
         targetSdk = 36
         versionCode = 1
