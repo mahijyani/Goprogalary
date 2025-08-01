@@ -1,4 +1,4 @@
-package com.example.goprogalary
+package com.gopro.galary
 
 import android.Manifest
 import android.content.pm.PackageManager
