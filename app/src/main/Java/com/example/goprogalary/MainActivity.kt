@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.gopro.galary.ui.theme.GoProGalaryTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +25,10 @@ class MainActivity : ComponentActivity() {
             "https://picsum.photos/500/300"
         )
         setContent {
-            MaterialTheme {
-                GalleryGrid(images = imageList)
+            GoProGalaryTheme {
+                Surface {
+                    GalleryGrid(images = imageList)
+                }
             }
         }
     }
